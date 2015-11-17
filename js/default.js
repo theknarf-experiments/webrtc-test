@@ -8,7 +8,7 @@
 var cfg = {"iceServers":[{"url":"stun:stun.l.google.com:19302"}]},
     con = { 'optional': [{'DtlsSrtpKeyAgreement': true}] };
 
-/* THIS IS ALICE, THE CALLER/SENDER */
+// --- THIS IS ALICE, THE CALLER/SENDER
 
 var pc1 = new RTCPeerConnection(cfg, con),
     dc1 = null, tn1 = null;
@@ -19,25 +19,49 @@ var activedc;
 
 var pc1icedone = false;
 
+createLocalOffer();
+
+function setupDC1() {
+    try {
+        dc1 = pc1.createDataChannel('test', {reliable:true});
+        activedc = dc1;
+        console.log("Created datachannel (pc1)");
+        dc1.onopen = function (e) {
+            console.log('data channel connect');
+        }
+
+        dc1.onmessage = function (e) {
+            console.log("Got message (pc1)", e.data);
+
+            if (e.data.charCodeAt(0) == 2) {
+               // The first message we get from Firefox (but not Chrome)
+               // is literal ASCII 2 and I don't understand why -- if we
+               // leave it in, JSON.parse() will barf.
+               return;
+            }
+            console.log(e);
+            var data = JSON.parse(e.data);
+            if (data.type === 'file') {
+                fileReceiver1.receive(e.data, {});
+            }
+            else {
+                writeToChatLog(data.message, "text-info");
+                // Scroll chat text area to the bottom on new input.
+                $('#chatlog').scrollTop($('#chatlog')[0].scrollHeight);
+            }            
+        };
+    } catch (e) { console.warn("No data channel (pc1)", e); }
+}
+
+function createLocalOffer() {
+    setupDC1();
+    pc1.createOffer(function (desc) {
+        pc1.setLocalDescription(desc, function () {}, function () {});
+        console.log("created local offer", desc);
+    }, function () {console.warn("Couldn't create offer");});
+}
+
 /*
-$('#showLocalOffer').modal('hide');
-$('#getRemoteAnswer').modal('hide');
-$('#waitForConnection').modal('hide');
-$('#createOrJoin').modal('show');*/
-
-$('#createBtn').click(function() {
-    $('#showLocalOffer').modal('show');
-    createLocalOffer();
-});
-
-$('#joinBtn').click(function() {
-    $('#getRemoteOffer').modal('show');
-});
-
-$('#offerSentBtn').click(function() {
-    $('#getRemoteAnswer').modal('show');
-});
-
 $('#offerRecdBtn').click(function() {
     var offer =  get_expanded_sdp($('#remoteOffer').val());
     var offerDesc = new RTCSessionDescription(offer);
@@ -97,52 +121,6 @@ function sendMessage() {
     return false;
 };
 
-function setupDC1() {
-    try {
-        var fileReceiver1 = new FileReceiver();
-        dc1 = pc1.createDataChannel('test', {reliable:true});
-        activedc = dc1;
-        console.log("Created datachannel (pc1)");
-        dc1.onopen = function (e) {
-            console.log('data channel connect');
-            $('#waitForConnection').modal('hide');
-            $('#waitForConnection').remove();
-        }
-        dc1.onmessage = function (e) {
-            console.log("Got message (pc1)", e.data);
-            if (e.data.size) {
-                fileReceiver1.receive(e.data, {});
-            }
-            else {
-                if (e.data.charCodeAt(0) == 2) {
-                   // The first message we get from Firefox (but not Chrome)
-                   // is literal ASCII 2 and I don't understand why -- if we
-                   // leave it in, JSON.parse() will barf.
-                   return;
-                }
-                console.log(e);
-                var data = JSON.parse(e.data);
-                if (data.type === 'file') {
-                    fileReceiver1.receive(e.data, {});
-                }
-                else {
-                    writeToChatLog(data.message, "text-info");
-                    // Scroll chat text area to the bottom on new input.
-                    $('#chatlog').scrollTop($('#chatlog')[0].scrollHeight);
-                }
-            }
-        };
-    } catch (e) { console.warn("No data channel (pc1)", e); }
-}
-
-function createLocalOffer() {
-    setupDC1();
-    pc1.createOffer(function (desc) {
-        pc1.setLocalDescription(desc, function () {}, function () {});
-        console.log("created local offer", desc);
-    }, function () {console.warn("Couldn't create offer");});
-}
-
 pc1.onicecandidate = function (e) {
     console.log("ICE candidate (pc1)", e);
     if (e.candidate == null) {
@@ -194,7 +172,7 @@ function handleCandidateFromPC2(iceCandidate) {
 }
 
 
-/* THIS IS BOB, THE ANSWERER/RECEIVER */
+// --- THIS IS BOB, THE ANSWERER/RECEIVER 
 
 var pc2 = new RTCPeerConnection(cfg, con),
     dc2 = null;
@@ -267,4 +245,4 @@ pc2.onaddstream = function (e) {
 
 pc2.onconnection = handleOnconnection;
 
-
+/* */
