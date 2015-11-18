@@ -3,10 +3,11 @@ body {
 	line-height: 20px;
 	font-size: 14px;
 	background: #F5F5F5;
-	color: rgb(51, 51, 51);
+	color: #333333;
+	padding: 20px;
 }
 
-.chatlog, .wrapper, .heading {
+.chatlog, .heading {
 	display: block;
 	width: 1610px;
 }
@@ -15,24 +16,24 @@ body {
 	color: #3A87AD;
 	height: 350px;
 	overflow: auto;
+	margin-bottom: 20px;
 }
 
-.heading {
+h1, .bold {
 	color: #999999;
 	height: 20px;
 	margin: 0px;
 	margin-bottom: 10px;
+	font-size: 14px;
+	font-weight: normal;
 }
 
-.wrapper {
-	height: 380px;
-	margin-bottom: 20px;
-	min-height: 20px;
-	padding: 19px;
+.bold {
+	font-weight: bold;
 }
 
 input {
-	margin: 20px;
+	margin-bottom: 20px;
 	padding: 20px;
 	border: 0;
 	outline: 0;
