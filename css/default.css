@@ -2,36 +2,33 @@ body {
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	line-height: 20px;
 	font-size: 14px;
-	background: rgb(245, 245, 245);
+	background: #F5F5F5;
 	color: rgb(51, 51, 51);
 }
 
-.chatlog {
-	color: rgb(58, 135, 173);
+.chatlog, .wrapper, .heading {
 	display: block;
+	width: 1610px;
+}
+
+.chatlog {
+	color: #3A87AD;
 	height: 350px;
 	overflow: auto;
-	width: 1610px;
-	overflow:auto;
 }
 
 .heading {
-	color: rgb(153, 153, 153);
-	display: block;
+	color: #999999;
 	height: 20px;
 	margin: 0px;
 	margin-bottom: 10px;
-	width: 1610px;
 }
 
 .wrapper {
-	display: block;
 	height: 380px;
-	line-height: 20px;
 	margin-bottom: 20px;
 	min-height: 20px;
 	padding: 19px;
-	width: 1610px;
 }
 
 input {
@@ -39,6 +36,6 @@ input {
 	padding: 20px;
 	border: 0;
 	outline: 0;
-	border-bottom: 1px solid rgb(58, 135, 173);
+	border-bottom: 1px solid #3A87AD;
 	min-width: 300px;
 }
