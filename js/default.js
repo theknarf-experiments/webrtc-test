@@ -68,7 +68,7 @@ pc1.onicecandidate = function (e) {
 
         console.log(pc1.localDescription);
         console.log("reduced sdp: ", sdp);
-        window.history.pushState(sdp, "Title", "/#" + get_expanded_sdp);
+        window.history.pushState(sdp, "Title", "/#" + sdp);
     }
 };
 
