@@ -61,6 +61,18 @@ function createLocalOffer() {
     }, function () {console.warn("Couldn't create offer");});
 }
 
+pc1.onicecandidate = function (e) {
+    console.log("ICE candidate (pc1)", e);
+    if (e.candidate == null) {
+        var sdp = get_reduced_sdp(pc1.localDescription);
+
+        console.log(pc1.localDescription);
+        console.log("reduced sdp: ", sdp);
+        window.history.pushState(sdp, "Title", "/#" + get_expanded_sdp);
+    }
+};
+
+
 /*
 $('#offerRecdBtn').click(function() {
     var offer =  get_expanded_sdp($('#remoteOffer').val());
@@ -82,31 +94,6 @@ $('#answerRecdBtn').click(function() {
     $('#waitForConnection').modal('show');
 });
 
-$('#fileBtn').change(function() {
-    var file = this.files[0];
-    console.log(file);
-
-    sendFile(file);
-});
-
-function fileSent(file) {
-    console.log(file + " sent");
-}
-
-function fileProgress(file) {
-    console.log(file + " progress");
-}
-
-function sendFile(data) {
-    if (data.size) {
-        FileSender.send({
-          file: data,
-          onFileSent: fileSent,
-          onFileProgress: fileProgress,
-        });
-    }
-}
-
 function sendMessage() {
     if ($('#messageTextBox').val()) {
         var channel = new RTCMultiSession();
@@ -119,16 +106,6 @@ function sendMessage() {
     }
 
     return false;
-};
-
-pc1.onicecandidate = function (e) {
-    console.log("ICE candidate (pc1)", e);
-    if (e.candidate == null) {
-        $('#localOffer').html(get_reduced_sdp(pc1.localDescription));
-        console.log(pc1.localDescription);
-        $('#localOffer').focus();
-        $('#localOffer').select();
-    }
 };
 
 function handleOnconnection() {
