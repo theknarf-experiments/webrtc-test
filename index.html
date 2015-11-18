@@ -3,9 +3,56 @@
   <head>
     <meta charset="utf-8" />
     <title>WebRTC test</title>
+
+    <!-- Stylesheet -->
+    <style>
+      body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        line-height: 20px;
+        font-size: 14px;
+        background: #F5F5F5;
+        color: #333333;
+        padding: 20px;
+      }
+
+      .chatlog, .heading {
+        display: block;
+        width: 1610px;
+      }
+
+      .chatlog {
+        color: #3A87AD;
+        height: 350px;
+        overflow: auto;
+        margin-bottom: 20px;
+      }
+
+      h1, .bold {
+        color: #999999;
+        height: 20px;
+        margin: 0px;
+        margin-bottom: 10px;
+        font-size: 14px;
+        font-weight: normal;
+      }
+
+      .bold {
+        font-weight: bold;
+      }
+
+      input {
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 0;
+        outline: 0;
+        border-bottom: 1px solid #3A87AD;
+        min-width: 300px;
+      }
+    </style>
+
+    <!-- Scripts -->
     <script src="vendor/adapter/adapter.js"></script>
     <script src="vendor/jquery/jquery-2.0.0.js"></script>
-    <link href="css/default.css" rel="stylesheet"/>
   </head>
   <body>
     <h1>Serverless WebRTC chat demonstration.</h1>
